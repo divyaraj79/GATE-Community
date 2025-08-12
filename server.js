@@ -49,11 +49,13 @@ const Category = require('./models/Category');
 const questionRoutes = require('./routes/questions');
 const userRoutes = require('./routes/users');
 const categoryRoutes = require('./routes/categories');
+const answerRoutes = require('./routes/answers');
 
 // Routes
 app.use('/questions', questionRoutes);
 app.use('/users', userRoutes);
 app.use('/categories', categoryRoutes);
+app.use('/answers', answerRoutes);
 
 // Home route
 app.get('/', async (req, res) => {

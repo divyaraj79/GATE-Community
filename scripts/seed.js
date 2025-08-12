@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const Category = require('../models/Category');
 const Question = require('../models/Question');
+const Answer = require('../models/Answer');
 require('dotenv').config();
 
 // MongoDB Connection
@@ -143,7 +144,7 @@ const questions = [
             { text: 'To increase database size', isCorrect: false },
             { text: 'To eliminate data redundancy and anomalies', isCorrect: true },
             { text: 'To make queries slower', isCorrect: false },
-            { text: 'To reduce security', isCorrect: false }
+            { text: 'To reduce security', isFalse: false }
         ],
         explanation: 'Normalization eliminates data redundancy and anomalies (insertion, update, and deletion anomalies) by organizing data into well-structured tables with proper relationships.',
         difficulty: 'Medium',
@@ -198,6 +199,34 @@ const questions = [
     }
 ];
 
+// Sample Answers
+const answers = [
+    {
+        content: 'Binary search has O(log n) time complexity because it divides the search space in half in each iteration. This makes it extremely efficient for large datasets compared to linear search.',
+        isAccepted: true
+    },
+    {
+        content: 'You can also think of it as: if you have n elements, you need at most log₂(n) comparisons to find any element, since 2^log₂(n) = n.',
+        isAccepted: false
+    },
+    {
+        content: 'Binary Heap is indeed the best choice. It provides O(log n) for both insert and extract operations, which is optimal for priority queue operations.',
+        isAccepted: false
+    },
+    {
+        content: 'Another advantage of Binary Heap is that it can be easily implemented using an array, making it memory efficient as well.',
+        isAccepted: false
+    },
+    {
+        content: 'Normalization helps in maintaining data integrity and consistency. It reduces the chance of data anomalies and makes the database more maintainable.',
+        isAccepted: false
+    },
+    {
+        content: 'The four necessary conditions for deadlock are: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. All four must be present for a deadlock to occur.',
+        isAccepted: false
+    }
+];
+
 // Seed function
 async function seedDatabase() {
     try {
@@ -207,6 +236,7 @@ async function seedDatabase() {
         await User.deleteMany({});
         await Category.deleteMany({});
         await Question.deleteMany({});
+        await Answer.deleteMany({});
         
         console.log('Cleared existing data');
         
@@ -229,6 +259,16 @@ async function seedDatabase() {
         const createdQuestions = await Question.insertMany(questionsWithRefs);
         console.log(`Created ${createdQuestions.length} questions`);
         
+        // Create answers with proper references
+        const answersWithRefs = answers.map((answer, index) => ({
+            ...answer,
+            question: createdQuestions[index % createdQuestions.length]._id,
+            author: createdUsers[index % createdUsers.length]._id
+        }));
+        
+        const createdAnswers = await Answer.insertMany(answersWithRefs);
+        console.log(`Created ${createdAnswers.length} answers`);
+        
         // Update category question counts
         for (const category of createdCategories) {
             await category.updateQuestionCount();
@@ -245,6 +285,7 @@ async function seedDatabase() {
         console.log(`- ${createdCategories.length} categories`);
         console.log(`- ${createdUsers.length} users`);
         console.log(`- ${createdQuestions.length} questions`);
+        console.log(`- ${createdAnswers.length} answers`);
         console.log('\nYou can now run the application and see the sample data.');
         
     } catch (error) {

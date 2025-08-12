@@ -89,8 +89,7 @@ router.get('/:id', async (req, res) => {
         const question = await Question.findById(req.params.id)
             .populate('category')
             .populate('author', 'username firstName lastName reputation')
-            .populate('upvotes', 'username')
-            .populate('downvotes', 'username');
+            .populate('likes', 'username');
             
         if (!question) {
             return res.status(404).render('error', { error: 'Question not found' });
@@ -238,44 +237,25 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 });
 
-// Vote on question
-router.post('/:id/vote', requireAuth, async (req, res) => {
+// Like/unlike question
+router.post('/:id/like', requireAuth, async (req, res) => {
     try {
-        const { voteType } = req.body;
         const question = await Question.findById(req.params.id);
         
         if (!question) {
             return res.status(404).json({ error: 'Question not found' });
         }
         
-        const userId = req.session.user._id;
-        const currentVote = question.hasUserVoted(userId);
-        
-        // Remove existing vote
-        if (currentVote === 'upvote') {
-            question.upvotes = question.upvotes.filter(id => id.toString() !== userId.toString());
-        } else if (currentVote === 'downvote') {
-            question.downvotes = question.downvotes.filter(id => id.toString() !== userId.toString());
-        }
-        
-        // Add new vote
-        if (voteType === 'upvote' && currentVote !== 'upvote') {
-            question.upvotes.push(userId);
-        } else if (voteType === 'downvote' && currentVote !== 'downvote') {
-            question.downvotes.push(userId);
-        }
-        
-        await question.save();
+        await question.toggleLike(req.session.user._id);
         
         res.json({
             success: true,
-            upvotes: question.upvotes.length,
-            downvotes: question.downvotes.length,
-            voteCount: question.voteCount
+            likeCount: question.likeCount,
+            isLiked: question.hasUserLiked(req.session.user._id)
         });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to vote' });
+        res.status(500).json({ error: 'Failed to toggle like' });
     }
 });
 

@@ -61,11 +61,7 @@ const questionSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    upvotes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    downvotes: [{
+    likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
@@ -83,16 +79,25 @@ const questionSchema = new mongoose.Schema({
 // Index for better search performance
 questionSchema.index({ title: 'text', content: 'text', tags: 'text' });
 
-// Virtual for vote count
-questionSchema.virtual('voteCount').get(function() {
-    return this.upvotes.length - this.downvotes.length;
+// Virtual for like count
+questionSchema.virtual('likeCount').get(function() {
+    return this.likes.length;
 });
 
-// Method to check if user has voted
-questionSchema.methods.hasUserVoted = function(userId) {
-    if (this.upvotes.includes(userId)) return 'upvote';
-    if (this.downvotes.includes(userId)) return 'downvote';
-    return null;
+// Method to check if user has liked
+questionSchema.methods.hasUserLiked = function(userId) {
+    return this.likes.includes(userId);
+};
+
+// Method to toggle like
+questionSchema.methods.toggleLike = function(userId) {
+    const hasLiked = this.hasUserLiked(userId);
+    if (hasLiked) {
+        this.likes = this.likes.filter(id => id.toString() !== userId.toString());
+    } else {
+        this.likes.push(userId);
+    }
+    return this.save();
 };
 
 module.exports = mongoose.model('Question', questionSchema);
