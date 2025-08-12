@@ -1,0 +1,211 @@
+<%- include('partials/header', { title: 'Home - GATE Question Bank', active: 'home' }) %>
+
+<!-- Hero Section -->
+<section class="hero-section text-center text-white py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    Master GATE with Community-Driven Questions
+                </h1>
+                <p class="lead mb-4">
+                    Join thousands of students and educators sharing high-quality GATE exam questions. 
+                    Learn, contribute, and excel in your preparation journey.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/questions" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>Browse Questions
+                    </a>
+                    <% if (!user) { %>
+                        <a href="/users/register" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Join Community
+                        </a>
+                    <% } else { %>
+                        <a href="/questions/create" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-plus me-2"></i>Add Question
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-question-circle fa-3x text-primary mb-3"></i>
+                    <h3 class="fw-bold text-primary"><%= totalQuestions.toLocaleString() %></h3>
+                    <p class="text-muted">Total Questions</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h3 class="fw-bold text-success"><%= totalUsers.toLocaleString() %></h3>
+                    <p class="text-muted">Community Members</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-tags fa-3x text-info mb-3"></i>
+                    <h3 class="fw-bold text-info"><%= categories.length %></h3>
+                    <p class="text-muted">Subject Categories</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Questions Section -->
+<section class="featured-questions py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="section-title">
+                    <i class="fas fa-star text-warning me-2"></i>
+                    Featured Questions
+                </h2>
+                <p class="text-muted">Latest high-quality questions from our community</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <% if (questions && questions.length > 0) { %>
+                <% questions.forEach(question => { %>
+                    <div class="col-lg-6 mb-4">
+                        <div class="question-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-<%= question.difficulty === 'Easy' ? 'success' : question.difficulty === 'Medium' ? 'warning' : 'danger' %>">
+                                        <%= question.difficulty %>
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-eye me-1"></i><%= question.views || 0 %>
+                                    </small>
+                                </div>
+                                <h5 class="card-title">
+                                    <a href="/questions/<%= question._id %>" class="text-decoration-none stretched-link">
+                                        <%= question.title %>
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <%= question.content.substring(0, 150) %>...
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="question-meta">
+                                        <span class="badge bg-secondary me-2">
+                                            <i class="fas fa-tag me-1"></i><%= question.category.name %>
+                                        </span>
+                                        <small class="text-muted">
+                                            <i class="fas fa-user me-1"></i><%= question.author.username %>
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">
+                                        <%= new Date(question.createdAt).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-question-circle fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No questions yet</h4>
+                    <p class="text-muted">Be the first to contribute a question!</p>
+                    <% if (user) { %>
+                        <a href="/questions/create" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add First Question
+                        </a>
+                    <% } else { %>
+                        <a href="/users/register" class="btn btn-primary">
+                            <i class="fas fa-user-plus me-2"></i>Join & Contribute
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+        
+        <% if (questions && questions.length > 0) { %>
+            <div class="text-center mt-4">
+                <a href="/questions" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-right me-2"></i>View All Questions
+                </a>
+            </div>
+        <% } %>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="section-title">
+                    <i class="fas fa-tags text-primary me-2"></i>
+                    Explore Categories
+                </h2>
+                <p class="text-muted">Browse questions by subject area</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <% categories.forEach(category => { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="category-card text-center h-100">
+                        <div class="card-body">
+                            <div class="category-icon mb-3">
+                                <i class="<%= category.icon %> fa-3x" style="color: <%= category.color %>"></i>
+                            </div>
+                            <h5 class="card-title"><%= category.name %></h5>
+                            <p class="card-text text-muted"><%= category.description %></p>
+                            <div class="category-stats mb-3">
+                                <span class="badge bg-primary me-2">
+                                    <i class="fas fa-question-circle me-1"></i><%= category.questionCount || 0 %> Questions
+                                </span>
+                            </div>
+                            <a href="/categories/<%= category.slug %>" class="btn btn-outline-primary">
+                                <i class="fas fa-arrow-right me-2"></i>Explore
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section py-5 text-center text-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Ready to Contribute?</h2>
+                <p class="lead mb-4">
+                    Share your knowledge and help fellow GATE aspirants. 
+                    Every question you add makes our community stronger.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <% if (user) { %>
+                        <a href="/questions/create" class="btn btn-light btn-lg">
+                            <i class="fas fa-plus me-2"></i>Add Question
+                        </a>
+                    <% } else { %>
+                        <a href="/users/register" class="btn btn-light btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Join Community
+                        </a>
+                        <a href="/users/login" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

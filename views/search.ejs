@@ -1,0 +1,194 @@
+<%- include('partials/header', { title: 'Search Results - GATE Question Bank', active: 'questions' }) %>
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4 fw-bold">
+                <i class="fas fa-search text-primary me-3"></i>
+                Search Results
+            </h1>
+            <% if (query || category || difficulty) { %>
+                <p class="lead text-muted">
+                    <% if (query) { %>
+                        Searching for "<strong><%= query %></strong>"
+                    <% } %>
+                    <% if (category) { %>
+                        in <strong><%= category %></strong>
+                    <% } %>
+                    <% if (difficulty) { %>
+                        with <strong><%= difficulty %></strong> difficulty
+                    <% } %>
+                </p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/search" method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="q" placeholder="Search questions..." 
+                                   value="<%= typeof query !== 'undefined' ? query : '' %>">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="category">
+                                <option value="">All Categories</option>
+                                <!-- Categories will be populated here -->
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="difficulty">
+                                <option value="">All Difficulties</option>
+                                <option value="Easy" <%= (typeof difficulty !== 'undefined' && difficulty === 'Easy') ? 'selected' : '' %>>Easy</option>
+                                <option value="Medium" <%= (typeof difficulty !== 'undefined' && difficulty === 'Medium') ? 'selected' : '' %>>Medium</option>
+                                <option value="Hard" <%= (typeof difficulty !== 'undefined' && difficulty === 'Hard') ? 'selected' : '' %>>Hard</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="row">
+        <% if (questions && questions.length > 0) { %>
+            <div class="col-12 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="mb-0">
+                        Found <strong><%= questions.length %></strong> question<%= questions.length !== 1 ? 's' : '' %>
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="/questions" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-list me-1"></i>View All
+                        </a>
+                        <a href="/categories" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-tags me-1"></i>Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <% questions.forEach(question => { %>
+                <div class="col-lg-6 mb-4">
+                    <div class="question-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-<%= question.difficulty === 'Easy' ? 'success' : question.difficulty === 'Medium' ? 'warning' : 'danger' %>">
+                                    <%= question.difficulty %>
+                                </span>
+                                <small class="text-muted">
+                                    <i class="fas fa-eye me-1"></i><%= question.views || 0 %>
+                                </small>
+                            </div>
+                            <h5 class="card-title">
+                                <a href="/questions/<%= question._id %>" class="text-decoration-none stretched-link">
+                                    <%= question.title %>
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted">
+                                <%= question.content.substring(0, 150) %>...
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="question-meta">
+                                    <span class="badge bg-secondary me-2">
+                                        <i class="fas fa-tag me-1"></i>
+                                        <%= question.category ? question.category.name : 'Uncategorized' %>
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1"></i>
+                                        <%= question.author ? question.author.username : 'Anonymous' %>
+                                    </small>
+                                </div>
+                                <small class="text-muted">
+                                    <%= new Date(question.createdAt).toLocaleDateString() %>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No questions found</h4>
+                <p class="text-muted">
+                    <% if (query || category || difficulty) { %>
+                        Try adjusting your search criteria or browse all questions
+                    <% } else { %>
+                        Start searching for questions or browse our categories
+                    <% } %>
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/questions" class="btn btn-primary">
+                        <i class="fas fa-question-circle me-2"></i>Browse All Questions
+                    </a>
+                    <a href="/categories" class="btn btn-outline-primary">
+                        <i class="fas fa-tags me-2"></i>Explore Categories
+                    </a>
+                    <% if (user) { %>
+                        <a href="/questions/create" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>Add Question
+                        </a>
+                    <% } else { %>
+                        <a href="/users/register" class="btn btn-success">
+                            <i class="fas fa-user-plus me-2"></i>Join Community
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Search Tips -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card bg-light">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb text-warning me-2"></i>
+                        Search Tips
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>Use Keywords</h6>
+                            <p class="small text-muted">Search for specific topics like "algorithms", "data structures", or "complexity analysis"</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Filter by Category</h6>
+                            <p class="small text-muted">Narrow down results by selecting a specific subject area</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Difficulty Level</h6>
+                            <p class="small text-muted">Choose Easy, Medium, or Hard to find questions at your level</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.question-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e9ecef;
+}
+
+.question-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+
+<%- include('partials/footer') %>

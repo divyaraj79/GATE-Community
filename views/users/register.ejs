@@ -1,0 +1,137 @@
+<%- include('../partials/header', { title: 'Register - GATE Question Bank' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header text-center bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Join Our Community
+                    </h3>
+                    <p class="mb-0">Create your GATE Question Bank account</p>
+                </div>
+                <div class="card-body p-4">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <% } %>
+
+                    <form action="/users/register" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" 
+                                           placeholder="Enter your first name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" 
+                                           placeholder="Enter your last name" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Choose a unique username" required>
+                            </div>
+                            <small class="form-text text-muted">Username will be displayed publicly</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="Enter your email address" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Create a strong password" required>
+                            </div>
+                            <small class="form-text text-muted">Minimum 6 characters</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="institution" class="form-label">Institution (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-university"></i>
+                                </span>
+                                <input type="text" class="form-control" id="institution" name="institution" 
+                                       placeholder="Your college/university">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="expertise" class="form-label">Areas of Expertise (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tags"></i>
+                                </span>
+                                <input type="text" class="form-control" id="expertise" name="expertise" 
+                                       placeholder="e.g., Computer Science, Mathematics, Physics">
+                            </div>
+                            <small class="form-text text-muted">Separate multiple areas with commas</small>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                            <label class="form-check-label" for="agreeTerms">
+                                I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and 
+                                <a href="#" class="text-decoration-none">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Create Account
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">Already have an account?</p>
+                        <a href="/users/login" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Sign In
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="/" class="text-muted text-decoration-none">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

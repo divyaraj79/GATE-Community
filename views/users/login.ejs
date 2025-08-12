@@ -1,0 +1,83 @@
+<%- include('../partials/header', { title: 'Login - GATE Question Bank' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Welcome Back
+                    </h3>
+                    <p class="mb-0">Sign in to your GATE Question Bank account</p>
+                </div>
+                <div class="card-body p-4">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <% } %>
+
+                    <form action="/users/login" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Enter your password" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Sign In
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">Don't have an account?</p>
+                        <a href="/users/register" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Create Account
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="/" class="text-muted text-decoration-none">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

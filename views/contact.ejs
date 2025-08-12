@@ -1,0 +1,98 @@
+<%- include('partials/header', { title: 'Contact - GATE Question Bank', active: 'contact' }) %>
+
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col text-center">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-envelope text-primary me-3"></i>
+                Contact Us
+            </h1>
+            <p class="lead text-muted">Have questions, feedback, or suggestions? We'd love to hear from you.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Send us a message</h5>
+                </div>
+                <div class="card-body">
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="How can we help?" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i> support@gate-qb.example</p>
+                    <p class="mb-2"><i class="fas fa-map-marker-alt me-2 text-danger"></i> Remote, Worldwide</p>
+                    <p class="mb-0"><i class="fas fa-clock me-2 text-success"></i> Mon - Fri, 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h6 class="mb-3">Quick Links</h6>
+                    <div class="d-grid gap-2">
+                        <a href="/questions" class="btn btn-outline-primary">
+                            <i class="fas fa-question-circle me-2"></i>Browse Questions
+                        </a>
+                        <a href="/categories" class="btn btn-outline-info">
+                            <i class="fas fa-tags me-2"></i>Categories
+                        </a>
+                        <a href="/users/register" class="btn btn-outline-success">
+                            <i class="fas fa-user-plus me-2"></i>Join Community
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Thanks for reaching out! Your message has been recorded locally.');
+    this.reset();
+});
+</script>
+
+<%- include('partials/footer') %>

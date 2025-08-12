@@ -1,0 +1,29 @@
+<%- include('partials/header', { title: 'Error - GATE Question Bank' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-page">
+                <i class="fas fa-exclamation-triangle fa-5x text-warning mb-4"></i>
+                <h1 class="display-4 text-danger mb-3">Oops!</h1>
+                <h2 class="mb-4"><%= error %></h2>
+                <p class="lead text-muted mb-5">
+                    Something went wrong. Don't worry, it's not your fault!
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="/" class="btn btn-primary btn-lg">
+                        <i class="fas fa-home me-2"></i>Go Home
+                    </a>
+                    <a href="/questions" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-question-circle me-2"></i>Browse Questions
+                    </a>
+                    <button onclick="history.back()" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Go Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

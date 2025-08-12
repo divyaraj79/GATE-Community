@@ -1,0 +1,228 @@
+<%- include('../partials/header', { title: 'Create Question - GATE Question Bank', active: 'questions' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="fas fa-plus text-primary me-2"></i>
+                        Create New Question
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form id="questionForm" action="/questions" method="POST">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Question Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" required 
+                                   placeholder="Enter a clear, concise title for your question">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Question Content *</label>
+                            <textarea class="form-control" id="content" name="content" rows="4" required
+                                      placeholder="Describe your question in detail..."></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category *</label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="">Select a category</option>
+                                        <% categories.forEach(category => { %>
+                                            <option value="<%= category._id %>"><%= category.name %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="difficulty" class="form-label">Difficulty Level *</label>
+                                    <select class="form-select" id="difficulty" name="difficulty" required>
+                                        <option value="">Select difficulty</option>
+                                        <option value="Easy">Easy</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Hard">Hard</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="year" class="form-label">Year (Optional)</label>
+                                    <input type="number" class="form-control" id="year" name="year" 
+                                           min="2000" max="2030" placeholder="e.g., 2023">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="marks" class="form-label">Marks *</label>
+                                    <input type="number" class="form-control" id="marks" name="marks" 
+                                           min="1" max="10" value="1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tags" class="form-label">Tags (Optional)</label>
+                            <input type="text" class="form-control" id="tags" name="tags" 
+                                   placeholder="Enter tags separated by commas (e.g., algorithms, data-structures, complexity)">
+                            <small class="form-text text-muted">Tags help others find your question</small>
+                        </div>
+
+                        <!-- Options Section -->
+                        <div class="mb-4">
+                            <label class="form-label">Question Options *</label>
+                            <div id="optionsContainer">
+                                <div class="option-row mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">A</span>
+                                        <input type="text" class="form-control" name="options[]" 
+                                               placeholder="Enter option A" required>
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" 
+                                                   name="correctOption" value="0" required>
+                                            <label class="form-check-label ms-2 mb-0">Correct</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-row mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">B</span>
+                                        <input type="text" class="form-control" name="options[]" 
+                                               placeholder="Enter option B" required>
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" 
+                                                   name="correctOption" value="1">
+                                            <label class="form-check-label ms-2 mb-0">Correct</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-row mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">C</span>
+                                        <input type="text" class="form-control" name="options[]" 
+                                               placeholder="Enter option C" required>
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" 
+                                                   name="correctOption" value="2">
+                                            <label class="form-check-label ms-2 mb-0">Correct</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option-row mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">D</span>
+                                        <input type="text" class="form-control" name="options[]" 
+                                               placeholder="Enter option D" required>
+                                        <div class="input-group-text">
+                                            <input class="form-check-input mt-0" type="radio" 
+                                                   name="correctOption" value="3">
+                                            <label class="form-check-label ms-2 mb-0">Correct</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addOption()">
+                                    <i class="fas fa-plus me-1"></i>Add Option
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOption()">
+                                    <i class="fas fa-minus me-1"></i>Remove Option
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="explanation" class="form-label">Explanation (Optional)</label>
+                            <textarea class="form-control" id="explanation" name="explanation" rows="3"
+                                      placeholder="Provide a detailed explanation of the correct answer..."></textarea>
+                            <small class="form-text text-muted">Helps others understand the solution</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/questions" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Create Question
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let optionCount = 4;
+
+function addOption() {
+    if (optionCount >= 8) {
+        alert('Maximum 8 options allowed');
+        return;
+    }
+    
+    const container = document.getElementById('optionsContainer');
+    const optionRow = document.createElement('div');
+    optionRow.className = 'option-row mb-2';
+    
+    const letter = String.fromCharCode(65 + optionCount);
+    optionRow.innerHTML = `
+        <div class="input-group">
+            <span class="input-group-text">${letter}</span>
+            <input type="text" class="form-control" name="options[]" 
+                   placeholder="Enter option ${letter}" required>
+            <div class="input-group-text">
+                <input class="form-check-input mt-0" type="radio" 
+                       name="correctOption" value="${optionCount}">
+                <label class="form-check-label ms-2 mb-0">Correct</label>
+            </div>
+        </div>
+    `;
+    
+    container.appendChild(optionRow);
+    optionCount++;
+}
+
+function removeOption() {
+    if (optionCount <= 2) {
+        alert('Minimum 2 options required');
+        return;
+    }
+    
+    const container = document.getElementById('optionsContainer');
+    container.removeChild(container.lastElementChild);
+    optionCount--;
+}
+
+// Form validation
+document.getElementById('questionForm').addEventListener('submit', function(e) {
+    const correctOption = document.querySelector('input[name="correctOption"]:checked');
+    if (!correctOption) {
+        e.preventDefault();
+        alert('Please select the correct option');
+        return false;
+    }
+    
+    const options = document.querySelectorAll('input[name="options[]"]');
+    let hasEmptyOption = false;
+    options.forEach(option => {
+        if (!option.value.trim()) {
+            hasEmptyOption = true;
+        }
+    });
+    
+    if (hasEmptyOption) {
+        e.preventDefault();
+        alert('Please fill in all option fields');
+        return false;
+    }
+});
+</script>
+
+<%- include('../partials/footer') %>

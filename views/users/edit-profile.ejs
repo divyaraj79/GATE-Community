@@ -1,0 +1,240 @@
+<%- include('../partials/header', { title: 'Edit Profile - GATE Question Bank' }) %>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="fas fa-edit text-primary me-2"></i>
+                        Edit Profile
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form id="editProfileForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="firstName" class="form-label">First Name *</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" 
+                                           value="<%= profile.firstName %>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lastName" class="form-label">Last Name *</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" 
+                                           value="<%= profile.lastName %>" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" value="<%= profile.username %>" disabled>
+                            <small class="form-text text-muted">Username cannot be changed</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" value="<%= profile.email %>" disabled>
+                            <small class="form-text text-muted">Email cannot be changed</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="institution" class="form-label">Institution</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-university"></i>
+                                </span>
+                                <input type="text" class="form-control" id="institution" name="institution" 
+                                       value="<%= profile.institution || '' %>" 
+                                       placeholder="Your college/university">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="expertise" class="form-label">Areas of Expertise</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-tags"></i>
+                                </span>
+                                <input type="text" class="form-control" id="expertise" name="expertise" 
+                                       value="<%= profile.expertise ? profile.expertise.join(', ') : '' %>"
+                                       placeholder="e.g., Computer Science, Mathematics, Physics">
+                            </div>
+                            <small class="form-text text-muted">Separate multiple areas with commas</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" 
+                                      placeholder="Tell us about yourself, your interests, and expertise..."><%= profile.bio || '' %></textarea>
+                            <small class="form-text text-muted">A brief description about yourself (optional)</small>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/users/profile" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Profile Preview -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-eye text-info me-2"></i>
+                        Profile Preview
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="profile-avatar mb-3">
+                                <i class="fas fa-user-circle fa-4x text-primary"></i>
+                            </div>
+                            <h5 id="previewName"><%= profile.firstName %> <%= profile.lastName %></h5>
+                            <p class="text-muted">@<%= profile.username %></p>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="previewInstitution" class="mb-2">
+                                <% if (profile.institution) { %>
+                                    <p class="text-muted mb-1">
+                                        <i class="fas fa-university me-2"></i>
+                                        <%= profile.institution %>
+                                    </p>
+                                <% } %>
+                            </div>
+                            <div id="previewBio" class="mb-2">
+                                <% if (profile.bio) { %>
+                                    <p class="text-muted mb-1"><%= profile.bio %></p>
+                                <% } %>
+                            </div>
+                            <div id="previewExpertise">
+                                <% if (profile.expertise && profile.expertise.length > 0) { %>
+                                    <small class="text-muted">Expertise:</small>
+                                    <div class="mt-1">
+                                        <% profile.expertise.forEach(exp => { %>
+                                            <span class="badge bg-light text-dark me-1"><%= exp %></span>
+                                        <% }) %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Real-time preview updates
+document.getElementById('firstName').addEventListener('input', updatePreview);
+document.getElementById('lastName').addEventListener('input', updatePreview);
+document.getElementById('institution').addEventListener('input', updatePreview);
+document.getElementById('bio').addEventListener('input', updatePreview);
+document.getElementById('expertise').addEventListener('input', updatePreview);
+
+function updatePreview() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const institution = document.getElementById('institution').value;
+    const bio = document.getElementById('bio').value;
+    const expertise = document.getElementById('expertise').value;
+    
+    // Update name
+    document.getElementById('previewName').textContent = `${firstName} ${lastName}`;
+    
+    // Update institution
+    const previewInstitution = document.getElementById('previewInstitution');
+    if (institution) {
+        previewInstitution.innerHTML = `
+            <p class="text-muted mb-1">
+                <i class="fas fa-university me-2"></i>
+                ${institution}
+            </p>
+        `;
+    } else {
+        previewInstitution.innerHTML = '';
+    }
+    
+    // Update bio
+    const previewBio = document.getElementById('previewBio');
+    if (bio) {
+        previewBio.innerHTML = `<p class="text-muted mb-1">${bio}</p>`;
+    } else {
+        previewBio.innerHTML = '';
+    }
+    
+    // Update expertise
+    const previewExpertise = document.getElementById('previewExpertise');
+    if (expertise) {
+        const expertiseArray = expertise.split(',').map(exp => exp.trim()).filter(exp => exp);
+        if (expertiseArray.length > 0) {
+            previewExpertise.innerHTML = `
+                <small class="text-muted">Expertise:</small>
+                <div class="mt-1">
+                    ${expertiseArray.map(exp => `<span class="badge bg-light text-dark me-1">${exp}</span>`).join('')}
+                </div>
+            `;
+        } else {
+            previewExpertise.innerHTML = '';
+        }
+    } else {
+        previewExpertise.innerHTML = '';
+    }
+}
+
+// Form submission
+document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        bio: formData.get('bio'),
+        institution: formData.get('institution'),
+        expertise: formData.get('expertise').split(',').map(exp => exp.trim()).filter(exp => exp)
+    };
+    
+    fetch('/users/profile', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Profile updated successfully!');
+            window.location.href = '/users/profile';
+        } else {
+            alert('Failed to update profile: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the profile');
+    });
+});
+</script>
+
+<style>
+.profile-avatar {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+
+<%- include('../partials/footer') %>
