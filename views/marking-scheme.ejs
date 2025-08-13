@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATE Marking Scheme - GATE Question Bank</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .marking-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #28a745;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .marking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .marking-card h4 {
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .score-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .score-box h3 {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .question-type {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .question-type h5 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        
+        .scoring-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .scoring-table th {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px;
+        }
+        
+        .scoring-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 80px 0 60px 0;
+            margin-bottom: 40px;
+        }
+        
+        .strategy-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .strategy-card h6 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .negative-marking {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .negative-marking h5 {
+            color: #721c24;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>
+                GATE Question Bank
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/questions"><i class="fas fa-question-circle me-1"></i>Questions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categories"><i class="fas fa-tags me-1"></i>Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/syllabus"><i class="fas fa-book me-1"></i>Syllabus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/marking-scheme"><i class="fas fa-chart-bar me-1"></i>Marking Scheme</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle me-1"></i>About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact"><i class="fas fa-envelope me-1"></i>Contact</a>
+                    </li>
+                </ul>
+                
+                <!-- Search Form -->
+                <form class="d-flex me-3" action="/search" method="GET">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="q" placeholder="Search questions..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- User Menu -->
+                <ul class="navbar-nav">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i><%= user.firstName %>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="/users/profile">
+                                    <i class="fas fa-user me-2"></i>Profile
+                                </a></li>
+                                <li><a class="dropdown-item" href="/questions/create">
+                                    <i class="fas fa-plus me-2"></i>Add Question
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/users/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/login">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/users/register">
+                                <i class="fas fa-user-plus me-1"></i>Register
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-chart-line me-3"></i>
+                        GATE Marking Scheme
+                    </h1>
+                    <p class="lead mb-0">
+                        Understanding the scoring system and exam pattern for strategic preparation
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content" style="margin-top: 20px;">
+        <div class="container">
+            <!-- Exam Overview -->
+            <div class="marking-card">
+                <h4><i class="fas fa-info-circle me-2"></i>Exam Overview</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-clock me-2 text-primary"></i><strong>Duration:</strong> 3 hours (180 minutes)</li>
+                            <li><i class="fas fa-question-circle me-2 text-primary"></i><strong>Total Questions:</strong> 65 questions</li>
+                            <li><i class="fas fa-calculator me-2 text-primary"></i><strong>Total Marks:</strong> 100 marks</li>
+                            <li><i class="fas fa-language me-2 text-primary"></i><strong>Language:</strong> English</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-laptop me-2 text-primary"></i><strong>Mode:</strong> Computer Based Test (CBT)</li>
+                            <li><i class="fas fa-calendar me-2 text-primary"></i><strong>Frequency:</strong> Once a year</li>
+                            <li><i class="fas fa-map-marker-alt me-2 text-primary"></i><strong>Centers:</strong> Multiple cities across India</li>
+                            <li><i class="fas fa-user-graduate me-2 text-primary"></i><strong>Eligibility:</strong> Final year students and graduates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Types and Scoring -->
+            <div class="marking-card">
+                <h4><i class="fas fa-list-ol me-2"></i>Question Types and Scoring</h4>
+                
+                <div class="question-type">
+                    <h5><i class="fas fa-check-circle me-2"></i>Multiple Choice Questions (MCQ)</h5>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ul>
+                                <li>1 mark questions: 25 questions</li>
+                                <li>2 marks questions: 30 questions</li>
+                                <li>Total MCQ questions: 55 questions</li>
+                                <li>Only one correct answer from given options</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="score-box">
+                                <h3>85 Marks</h3>
+                                <p class="mb-0">MCQ Section</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-type">
+                    <h5><i class="fas fa-edit me-2"></i>Numerical Answer Type (NAT)</h5>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ul>
+                                <li>1 mark questions: 5 questions</li>
+                                <li>2 marks questions: 5 questions</li>
+                                <li>Total NAT questions: 10 questions</li>
+                                <li>No options provided, enter numerical value</li>
+                                <li>Decimal answers allowed (up to 2 decimal places)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="score-box">
+                                <h3>15 Marks</h3>
+                                <p class="mb-0">NAT Section</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Scoring Table -->
+            <div class="marking-card">
+                <h4><i class="fas fa-table me-2"></i>Detailed Scoring Breakdown</h4>
+                <div class="table-responsive">
+                    <table class="table scoring-table">
+                        <thead>
+                            <tr>
+                                <th>Question Type</th>
+                                <th>Number of Questions</th>
+                                <th>Marks per Question</th>
+                                <th>Total Marks</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MCQ (1 mark)</strong></td>
+                                <td>25</td>
+                                <td>1</td>
+                                <td>25</td>
+                                <td>25%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MCQ (2 marks)</strong></td>
+                                <td>30</td>
+                                <td>2</td>
+                                <td>60</td>
+                                <td>60%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NAT (1 mark)</strong></td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>5</td>
+                                <td>5%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NAT (2 marks)</strong></td>
+                                <td>5</td>
+                                <td>2</td>
+                                <td>10</td>
+                                <td>10%</td>
+                            </tr>
+                            <tr class="table-primary">
+                                <td><strong>TOTAL</strong></td>
+                                <td><strong>65</strong></td>
+                                <td>-</td>
+                                <td><strong>100</strong></td>
+                                <td><strong>100%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Negative Marking -->
+            <div class="negative-marking">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Negative Marking</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>For 1 Mark Questions:</h6>
+                        <ul>
+                            <li>Correct Answer: +1 mark</li>
+                            <li>Wrong Answer: -0.33 marks</li>
+                            <li>Unanswered: 0 marks</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>For 2 Mark Questions:</h6>
+                        <ul>
+                            <li>Correct Answer: +2 marks</li>
+                            <li>Wrong Answer: -0.67 marks</li>
+                            <li>Unanswered: 0 marks</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert alert-warning mt-3">
+                    <strong>Important:</strong> There is NO negative marking for Numerical Answer Type (NAT) questions. Only attempt them if you are confident about your answer.
+                </div>
+            </div>
+
+            <!-- Subject-wise Weightage -->
+            <div class="marking-card">
+                <h4><i class="fas fa-balance-scale me-2"></i>Subject-wise Weightage (General)</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Core Subjects (70-80%)</h6>
+                        <ul>
+                            <li>Engineering Mathematics: 15%</li>
+                            <li>Core Discipline Subjects: 55-65%</li>
+                            <li>General Aptitude: 15%</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>General Aptitude (15%)</h6>
+                        <ul>
+                            <li>Verbal Ability: 5 questions</li>
+                            <li>Numerical Ability: 5 questions</li>
+                            <li>Total: 10 questions (15 marks)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategy Tips -->
+            <div class="marking-card">
+                <h4><i class="fas fa-lightbulb me-2"></i>Strategic Tips for Maximum Score</h4>
+                
+                <div class="strategy-card">
+                    <h6><i class="fas fa-target me-2"></i>Target Setting</h6>
+                    <p class="mb-0">Aim for at least 70-75 marks to secure a good rank. Focus on high-weightage topics first.</p>
+                </div>
+
+                <div class="strategy-card">
+                    <h6><i class="fas fa-clock me-2"></i>Time Management</h6>
+                    <p class="mb-0">Allocate time based on question weightage: 1-mark questions (45 mins), 2-mark questions (90 mins), NAT questions (30 mins), Review (15 mins).</p>
+                </div>
+
+                <div class="strategy-card">
+                    <h6><i class="fas fa-check-double me-2"></i>Answer Strategy</h6>
+                    <p class="mb-0">Attempt all questions you're confident about. For doubtful questions, use elimination method. Leave very difficult questions for the end.</p>
+                </div>
+
+                <div class="strategy-card">
+                    <h6><i class="fas fa-calculator me-2"></i>NAT Questions</h6>
+                    <p class="mb-0">These have no negative marking. Even if you're not 100% sure, make an educated guess based on your calculations.</p>
+                </div>
+
+                <div class="strategy-card">
+                    <h6><i class="fas fa-undo me-2"></i>Review Process</h6>
+                    <p class="mb-0">Always keep 10-15 minutes for review. Check for calculation errors, ensure all questions are attempted, and verify your answers.</p>
+                </div>
+            </div>
+
+            <!-- Important Notes -->
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i>Important Notes</h5>
+                <ul class="mb-0">
+                    <li>The marking scheme is subject to change. Always refer to the official GATE website for the most current information.</li>
+                    <li>Different subjects may have slightly different weightage distributions.</li>
+                    <li>Practice mock tests to understand the actual exam environment and time pressure.</li>
+                    <li>Focus on accuracy rather than speed initially, then work on improving your speed.</li>
+                    <li>Remember that GATE is a qualifying exam for M.Tech programs and PSU recruitment.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-graduation-cap me-2"></i>GATE Question Bank</h5>
+                    <p class="mb-0">Community-driven database of high-quality GATE exam questions.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="/questions" class="text-light text-decoration-none">Questions</a></li>
+                        <li><a href="/categories" class="text-light text-decoration-none">Categories</a></li>
+                        <li><a href="/syllabus" class="text-light text-decoration-none">Syllabus</a></li>
+                        <li><a href="/marking-scheme" class="text-light text-decoration-none">Marking Scheme</a></li>
+                        <li><a href="/about" class="text-light text-decoration-none">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Connect</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/contact" class="text-light text-decoration-none">Contact Us</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 GATE Question Bank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
